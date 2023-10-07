@@ -6,6 +6,10 @@ export default defineConfig({
   description: "C'est la Vue - VitePress Edition",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    search: {
+      provider: 'locals'
+    },
+
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Examples', link: '/markdown-examples' }
