@@ -1,0 +1,218 @@
+backend:
+  name: git-gateway
+  branch: main # Branch to update (optional; defaults to master)
+  commit_messages:
+    create: "Creating {{collection}} “{{slug}}”"
+    update: "Updating {{collection}} “{{slug}}”"
+    delete: "Deleting {{collection}} “{{slug}}”"
+    uploadMedia: "[skip ci] Uploading “{{path}}”"
+    deleteMedia: "[skip ci] Deleting “{{path}}”"
+
+# Publish mode https://www.netlifycms.org/docs/configuration-options/#publish-mode
+# publish_mode: editorial_workflow
+
+# Media and Public Folders https://www.netlifycms.org/docs/configuration-options/#media-and-public-folders
+media_folder: public/images
+public_folder: /images
+
+# Collections https://www.netlifycms.org/docs/configuration-options/#collections
+collections:
+  - label: Settings
+    name: settings
+    editor:
+      preview: false
+    files:
+      - label: General
+        name: general
+        format: frontmatter
+        file: content/settings/general.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Subtitle, name: sub_title, widget: string }
+          - { label: Hero Message, name: hero_message, widget: string }
+          - { label: Call to Action Text, name: cta_text, widget: string }
+          - { label: Hero Image, name: hero_image, widget: image }
+          - { label: Base URL, name: base_url, widget: string }
+          - { label: Social Media Image, name: social_image, widget: image }
+          - { label: Social Media Image Alt Text, name: social_image_alt, widget: string }
+          - { label: Twitter, name: twitter, widget: string }
+          - { label: Facebook, name: facebook, widget: string }
+          - { label: Instagram, name: instagram, widget: string }
+
+      - label: Blog
+        name: blog
+        format: frontmatter
+        file: content/settings/blog.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Show in Menu, name: menu, widget: boolean, default: true }
+          - { label: Show on Landing Page, name: landing, widget: boolean, default: true }
+          - { label: Display Order, name: order, widget: number, value_type: int, min: 1, max: 10 }
+          - { label: URL, name: url, widget: hidden, default: "/blog"}
+          - { label: Body, name: body, widget: markdown }
+
+      - label: Gallery
+        name: gallery
+        format: frontmatter
+        file: content/settings/gallery.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Show in Menu, name: menu, widget: boolean, default: true }
+          - { label: Show on Landing Page, name: landing, widget: boolean, default: true }
+          - { label: Display Order, name: order, widget: number, value_type: int, min: 1, max: 10 }
+          - { label: URL, name: url, widget: hidden, default: "/gallery"}
+          - { label: Body, name: body, widget: markdown }
+
+      - label: Pages
+        name: pages
+        format: frontmatter
+        file: content/settings/pages.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Show in Menu, name: menu, widget: boolean, default: true }
+          - { label: Show on Landing Page, name: landing, widget: boolean, default: true }
+          - { label: Table of Contents Style, name: toc_style, widget: select, options: [ "Cards", "List" ], default: "Cards" }
+          - { label: Display Order, name: order, widget: number, value_type: int, min: 1, max: 10 }
+          - { label: URL, name: url, widget: hidden, default: "/pages"}
+          - { label: Body, name: body, widget: markdown }
+
+      - label: Recipes
+        name: recipes
+        format: frontmatter
+        file: content/settings/recipes.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Show in Menu, name: menu, widget: boolean, default: true }
+          - { label: Show on Landing Page, name: landing, widget: boolean, default: true }
+          - { label: Display Order, name: order, widget: number, value_type: int, min: 1, max: 10 }
+          - { label: URL, name: url, widget: hidden, default: "/recipes"}
+          - { label: Body, name: body, widget: markdown }
+
+  - label: Blog
+    name: blog
+    label_singular: 'Post'
+    folder: content/blog
+    format: frontmatter
+    create: true
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Publish Date, name: date, widget: datetime }
+      - { label: Published, name: published, widget: boolean, required: false, default: false }
+      - { label: Featured Image, name: featured_image, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
+      - { label: Tags, name: tags, widget: list }
+
+  - label: Gallery
+    name: gallery
+    label_singular: 'Entry'
+    folder: content/gallery
+    format: frontmatter
+    create: true
+    editor:
+      preview: false
+    nested:
+      depth: 100
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Is Top Level, name: top_level, widget: boolean, default: true, hint: 'If this should contain entries, mark it as top level (Example: Art would be top level. Whereas a painting is not.)' }
+      - { label: Publish Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, required: false, default: false }
+      - { label: Featured Image, name: featured_image, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
+      - { label: Tags, name: tags, widget: list }
+    meta: { path: { widget: string, label: 'Path', index_file: 'index', hint: 'Separate paths with a forward slash "/" (Example: art/painting-1)' } }
+
+  - label: Pages
+    name: pages
+    label_singular: 'Page'
+    folder: content/pages
+    format: frontmatter
+    create: true
+    editor:
+      preview: false
+    nested:
+      depth: 100
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Is Top Level, name: top_level, widget: boolean, default: true, hint: 'If this should contain sub pages, mark it as top level (Example: A "Book" or an index of pages would be top level. Whereas a simple page is not.)' }
+      - { label: Publish Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, required: false, default: false }
+      - { label: Featured Image, name: featured_image, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
+      - { label: Tags, name: tags, widget: list }
+    meta: { path: { widget: string, label: 'Path', index_file: 'index', hint: 'Separate paths with a forward slash "/" (Example: mybook/page-1)' } }
+
+  - label: Recipes
+    name: recipes
+    label_singular: 'Recipe'
+    folder: content/recipes
+    format: frontmatter
+    create: true
+    editor:
+      preview: false
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Publish Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, required: false, default: false }
+      - { label: Featured Image, name: featured_image, widget: image, required: false }
+      - { label: Overview, name: body, widget: markdown }
+      - {
+          label: Ingredients,
+          name: ingredients,
+          widget: list,
+          summary: '{{qty}} {{unit}} {{ingredient}} ({{note}})',
+          fields:
+            [
+              { label: Quantity, name: qty, widget: string, required: false },
+              {
+                label: Unit of Measurement,
+                name: unit,
+                widget: select,
+                required: false,
+                options:
+                  [
+                    "tsp(s)",
+                    "tbsp(s)",
+                    "oz(s)",
+                    "cup(s)",
+                    "pint(s)",
+                    "quart(s)",
+                    "gallon(S)",
+                    "slice(s)",
+                    "pound(s)",
+                    "gram(s)",
+                    "kilogram(s)",
+                    "small",
+                    "medium",
+                    "large",
+                    "xlarge",
+                    "clove(s)",
+                    "bag(s)",
+                    "box(es)",
+                    "jar(s)",
+                    "package(s)",
+                    "whole",
+                    "head(s)",
+                    "packet(s)",
+                  ]
+              },
+              { label: Ingredient, name: ingredient, widget: string },
+              { label: Note, name: note, widget: string, required: false },
+            ]
+        }
+      - {
+          label: Instructions,
+          name: instructions,
+          widget: list,
+          summary: '{{instruction}} ({{note}})',
+          fields:
+            [
+              { label: Instruction, name: instruction, widget: string },
+              { label: Note, name: note, widget: string, required: false },
+            ]
+        }
+      - { label: Notes, name: notes, widget: text, required: false }
+      - { label: Tags, name: tags, widget: list }
